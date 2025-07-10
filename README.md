@@ -92,3 +92,4 @@ The codebase is hosted on a <b>public GitHub repository</b>. Team members collab
     <td>Improved code structure and authored documentation</td>
   </tr>
 </table>
+<h3><b>Git Links</b></h3>
