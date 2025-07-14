@@ -1,0 +1,114 @@
+import sqlite3
+from tkinter import *
+from tkinter import messagebox
+
+# ------------------ DATABASE SETUP ------------------
+conn = sqlite3.connect('studyhub.db')
+cursor = conn.cursor()
+
+# Create Users table
+cursor.execute('''
+CREATE TABLE IF NOT EXISTS Users (
+    UserID INTEGER PRIMARY KEY AUTOINCREMENT,
+    Username TEXT NOT NULL,
+    Email TEXT NOT NULL UNIQUE,
+    Password TEXT NOT NULL
+)
+''')
+
+# Create StudyRecords table
+cursor.execute('''
+CREATE TABLE IF NOT EXISTS StudyRecords (
+    RecordID INTEGER PRIMARY KEY AUTOINCREMENT,
+    UserID INTEGER,
+    StudyTopic TEXT,
+    Notes TEXT,
+    FOREIGN KEY (UserID) REFERENCES Users(UserID)
+)
+''')
+
+# Insert dummy data if not already present
+cursor.execute("SELECT * FROM Users WHERE Email = 'student01@email.com'")
+if cursor.fetchone() is None:
+    cursor.execute("INSERT INTO Users (Username, Email, Password) VALUES (?, ?, ?)",
+                   ('student01', 'student01@email.com', '123456'))
+    cursor.execute("INSERT INTO StudyRecords (UserID, StudyTopic, Notes) VALUES (?, ?, ?)",
+                   (1, 'Database Basics', 'This note covers normalization, SQL commands, and joins.'))
+    cursor.execute("INSERT INTO StudyRecords (UserID, StudyTopic, Notes) VALUES (?, ?, ?)",
+                   (1, 'Python Tkinter', 'Widgets, layout managers, and event handling.'))
+    conn.commit()
+
+# ------------------ UI WINDOWS ------------------
+
+root = Tk()
+root.title("Study Hub")
+root.geometry("400x300")
+
+# ------------------ Welcome Screen ------------------
+def show_welcome():
+    clear_screen()
+    Label(root, text="Welcome to Study Hub", font=("Helvetica", 20)).pack(pady=50)
+    Button(root, text="Proceed to Login", font=("Helvetica", 12), command=show_login).pack()
+
+# ------------------ Login Screen ------------------
+def show_login():
+    clear_screen()
+    Label(root, text="Login", font=("Helvetica", 18)).pack(pady=20)
+
+    Label(root, text="Email").pack()
+    email_entry = Entry(root, width=30)
+    email_entry.pack()
+
+    Label(root, text="Password").pack()
+    password_entry = Entry(root, width=30, show='*')
+    password_entry.pack()
+
+    def attempt_login():
+        email = email_entry.get()
+        password = password_entry.get()
+        cursor.execute("SELECT * FROM Users WHERE Email=? AND Password=?", (email, password))
+        user = cursor.fetchone()
+        if user:
+            show_dashboard(user[0])
+        else:
+            messagebox.showerror("Login Failed", "Invalid email or password.")
+
+    Button(root, text="Login", font=("Helvetica", 12), command=attempt_login).pack(pady=10)
+
+# ------------------ Dashboard Screen ------------------
+def show_dashboard(user_id):
+    clear_screen()
+    Label(root, text="Study Dashboard", font=("Helvetica", 18)).pack(pady=10)
+
+    Label(root, text="Search Study Record by ID").pack()
+    id_entry = Entry(root, width=30)
+    id_entry.pack()
+
+    result_text = Text(root, height=6, width=45)
+    result_text.pack(pady=10)
+
+    def search_record():
+        record_id = id_entry.get()
+        if not record_id.isdigit():
+            messagebox.showwarning("Invalid Input", "Please enter a valid numeric ID.")
+            return
+        cursor.execute("SELECT StudyTopic, Notes FROM StudyRecords WHERE RecordID=?", (record_id,))
+        record = cursor.fetchone()
+        result_text.delete("1.0", END)
+        if record:
+            result_text.insert(END, f"Topic: {record[0]}\nNotes: {record[1]}")
+        else:
+            result_text.insert(END, "No record found with that ID.")
+
+    Button(root, text="Search", font=("Helvetica", 12), command=search_record).pack()
+
+# ------------------ Utility Function ------------------
+def clear_screen():
+    for widget in root.winfo_children():
+        widget.destroy()
+
+# ------------------ Start the App ------------------
+show_welcome()
+root.mainloop()
+
+# ------------------ End ------------------
