@@ -65,11 +65,11 @@ def show_login():
 
     def attempt_login():
         email = email_entry.get()
-        password = password_entry.get()
+        password =password_entry.get()
         cursor.execute("SELECT * FROM Users WHERE Email=? AND Password=?", (email, password))
-        user = cursor.fetchone()
-        if user:
-            show_dashboard(user[0])
+        user_record=cursor.fetchonr()
+        if user_record:
+            show_dashboard(user_record[0])
         else:
             messagebox.showerror("Login Failed", "Invalid email or password.")
 
