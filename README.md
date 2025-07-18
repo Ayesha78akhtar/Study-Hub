@@ -58,13 +58,7 @@ The codebase is hosted on a <b>public GitHub repository</b>. Team members collab
 
 <br>
 
-<h3><b>Screenshots</b></h3>
-<ul>
-  <li>Welcome Screen: <code>assets/welcome.png</code></li>
-  <li>Login Screen: <code>assets/login.png</code></li>
-  <li>Dashboard Screen: <code>assets/dashboard.png</code></li>
-</ul>
-<p>(Place screenshots in the <code>assets/</code> folder in your repo)</p>
+
 
 <br>
 
