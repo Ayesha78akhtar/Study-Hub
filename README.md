@@ -52,7 +52,7 @@ The codebase is hosted on a <b>public GitHub repository</b>. Team members collab
 <ol>
   <li>Clone the repository from GitHub</li>
   <li>Run <code>database_setup.py</code> once to initialize the database</li>
-  <li>Start the app by running <code>welcome_screen.py</code></li>
+  <li>Start the app by running <code>welcome_screen.py</code></li>
 </ol>
 
 <br>
