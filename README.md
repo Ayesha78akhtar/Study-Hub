@@ -51,8 +51,7 @@ The codebase is hosted on a <b>public GitHub repository</b>. Team members collab
 <h3><b>Setup & Run Instructions</b></h3>
 <ol>
   <li>Clone the repository from GitHub</li>
-  <li>Ensure Python is installed (Python 3.8+ recommended)</li>
-  <li>Run <code>database_setup.py</code> once to initialize the database</li>
+  <li>Run <code>database_setup.py</code> once to initialize the database</li>
   <li>Start the app by running <code>welcome_screen.py</code></li>
 </ol>
 
